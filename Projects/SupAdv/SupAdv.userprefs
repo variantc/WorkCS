@@ -1,0 +1,13 @@
+﻿<Properties StartupItem="SupAdv/SupAdv.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="SupAdv/SupAdv.cs">
+    <Files>
+      <File FileName="SupAdv/Program.cs" Line="18" Column="3" />
+      <File FileName="SupAdv/SupAdv.cs" Line="14" Column="18" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

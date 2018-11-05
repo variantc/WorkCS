@@ -1,0 +1,379 @@
+using System;
+using System.Collections.Generic;
+using System.Math;
+
+public class MatComp
+{
+    // Weld Group Properties
+    static float b = 0;
+    static float d = 0;
+    static float Pa = 0;
+    static float Pb = 0;
+    static float Pc = 0;
+    static float Ma = 0;
+    static float Mb = 0;
+    static float Mc = 0;
+
+    public static void Main()
+    {
+
+        WeldGroup weldGroup = WeldGroup.NoVal;
+        // Set to start in Main Menu
+        State menuState = State.MainMenu;
+        bool quit = false;
+
+
+        // Loop until 'q' is pressed
+        string message = "";
+        while (!quit)
+        {
+
+            // Main Menu
+            if (menuState == State.MainMenu)
+            {
+                Console.Clear();
+                Console.WriteLine(message);
+                message = "";
+                PrintMainMenu();
+
+                string input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "1":
+                        // Take to Confirm Weld Group Page
+                        menuState = State.ConfirmWeldType;
+                        weldGroup = WeldGroup.ParallelA; 
+                        break;
+
+                    case "q":
+                    case "Q":
+                        quit = true;
+                        continue;
+                    default:
+                        message = "\n          INVALID SELECTION";
+                        break;
+                }
+            } 
+
+            // Enter Properties
+            else if (menuState == State.ConfirmWeldType)
+            {
+                Console.Clear();
+                PrintConfirmText();
+                PrintDiagramParallelA();                
+                Console.WriteLine("Confirm Weld Type (\"y\")");
+                Console.WriteLine("");
+                Console.WriteLine("Press any key to return to Main Menu:");
+                Console.WriteLine("");
+                // Wait for enter:
+                string input = Console.ReadLine();
+                if (input == "y" || input == "Y")
+                    menuState = State.EnterProperties;
+                else
+                    menuState = State.MainMenu;
+            }
+
+            else if (menuState == State.EnterProperties)
+            {
+                Console.Clear();
+                PrintPropertiesMenu();
+                // Wait for enter:
+                string input = Console.ReadLine();
+                
+                string val = "";
+
+                bool entering = true;
+
+                while (entering == true)
+                {
+                    switch (input)
+                    {
+                        case "1":
+                            Console.WriteLine("Enter value for \"b\":  ");
+                            val = Console.ReadLine();
+                            if (val == "") {
+                                entering = false;
+                                break;
+                            }
+                            b = float.Parse(val);
+                            break;
+                        case "2":
+                            Console.WriteLine("Enter value for \"d\":  ");
+                            val = Console.ReadLine();
+                            if (val == "") {
+                                entering = false;
+                                break;
+                            }
+                            d = float.Parse(val);
+                            break;
+                        case "3":
+                            Console.WriteLine("Enter value for \"Pa\":  ");
+                            val = Console.ReadLine();
+                            if (val == "") {
+                                entering = false;
+                                break;
+                            }
+                            Pa = float.Parse(val);
+                            break;
+                        case "4":
+                            Console.WriteLine("Enter value for \"Pb\":  ");
+                            val = Console.ReadLine();
+                            if (val == "") {
+                                entering = false;
+                                break;
+                            }
+                            Pb = float.Parse(val);
+                            break;
+                        case "5":
+                            Console.WriteLine("Enter value for \"Pc\":  ");
+                            val = Console.ReadLine();
+                            if (val == "") {
+                                entering = false;
+                                break;
+                            }
+                            Pc = float.Parse(val);
+                            break;
+                        case "6":
+                            Console.WriteLine("Enter value for \"Ma\":  ");
+                            val = Console.ReadLine();
+                            if (val == "") {
+                                entering = false;
+                                break;
+                            }
+                            Ma = float.Parse(val);
+                            break;
+                        case "7":
+                            Console.WriteLine("Enter value for \"Mb\":  ");
+                            val = Console.ReadLine();
+                            if (val == "") {
+                                entering = false;
+                                break;
+                            }
+                            Mb = float.Parse(val);
+                            break;
+                        case "8":
+                            Console.WriteLine("Enter value for \"Mc\":  ");
+                            val = Console.ReadLine();
+                            if (val == "") {
+                                entering = false;
+                                break;
+                            }
+                            Mc = float.Parse(val);
+                            entering = false;
+                            break;
+
+                        case "b":
+                        case "B":
+                            menuState = State.MainMenu;
+                            entering = false;
+                            break;
+
+                        case "c":
+                        case "C":
+                            menuState = State.Calculating;
+                            entering = false;
+                            break;
+                            
+                        case "q":
+                        case "Q":
+                            quit = true;
+                            entering = false;
+                            continue;
+                        default:
+                            message = "\n          INVALID SELECTION";
+                            entering = false;
+                            break;
+                    }
+                    if (entering == true) {
+                        int iInput = int.Parse(input) + 1;
+                        input = iInput.ToString();
+                    }
+                }
+            }
+
+            else if (menuState == State.Calculating) 
+            {
+                Console.Clear();
+                PrintCalculatingHeader();
+                PerformCalculationsParrallelA();
+                // Wait for enter:
+                string input = Console.ReadLine();
+                quit = true; 
+            }
+        }
+    }
+
+    private static void PerformCalculationsParrallelA() 
+    { 
+        float La = 2 * d;
+        Console.WriteLine("     La = " + La + " in.");
+        float Lb = 2 * d;
+        Console.WriteLine("     Lb = " + Lb + " in.");
+        float Lc = 2 * d;
+        Console.WriteLine("     Lc = " + Lc + " in.");
+        float Ca = b / 2;
+        Console.WriteLine("     Ca = " + Ca + " in.");
+        float Cb = d / 2;
+        Console.WriteLine("     Cb = " + Cb + " in.");
+        float SMa = d*d / 3;
+        Console.WriteLine("     SMa = " + SMa + " in.^2");
+        float SMb = b * d;
+        Console.WriteLine("     SMb = " + SMb + " in.^2");
+        float PMI = (d/6) * (3*b*3*b + d*d);
+        Console.WriteLine("     PMI = " + PMI + " in.^3");  
+        Console.WriteLine("");
+        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("");
+        float fa = (Pa/La) + Mc*Cb/PMI;
+        float fb = (Pb/Lb) + Mc*Ca/PMI;
+        float fc = (Pc/Lc) + Ma/SMa + Mb/SMb;
+        Console.WriteLine("");
+        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("");
+        float fr = Sqrt(fa*fa + fb*fb + fc*fc);
+    }
+
+    // print out the menu
+    private static void PrintMainMenu()
+    {
+        PrintOptions();
+    }
+
+    static void PrintOptions()
+    {
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+        Console.WriteLine("Select Weld Group Type:");
+        Console.WriteLine("");
+        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("");
+        
+        // loop through each element type in WeldGroup enum and print
+        int i = 0;
+        foreach (WeldGroup weldGroup in Enum.GetValues(typeof(WeldGroup)))
+        {
+            // FIXME using i from zero rather than one since added 'NoVal' value to the WeldGroup
+            // enum
+            if (i == 0)
+            {
+                i++;
+                continue;
+            }
+            Console.WriteLine(" " + i + " - " + weldGroup);
+            i++;
+        }
+        
+        Console.WriteLine("");
+        Console.WriteLine("         Enter 'q' to quit ");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+
+//        PrintDiagramParallelA();
+//        PrintDiagramParallelB();
+
+    }
+
+    static void PrintConfirmText() {
+        Console.WriteLine("");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+        Console.WriteLine("Confirm Weld Group Type:");
+        Console.WriteLine("");
+        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("");
+    }
+
+    static void PrintCalculatingHeader()
+    {
+        Console.WriteLine("");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+        Console.WriteLine("Performing Calculations:");
+        Console.WriteLine("");
+        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("");
+    }
+
+    static void PrintDiagramParallelA() {
+        Console.WriteLine("    < b >            \"b\" axis");
+        Console.WriteLine(" ^ |     |            |");
+        Console.WriteLine("   |     |            |");
+        Console.WriteLine(" d |     |            |____  \"a\" axis");
+        Console.WriteLine("   |     |           /");
+        Console.WriteLine(" v |     |          /  \"c\" axis");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+    }
+
+    static void PrintDiagramParallelB() {
+        Console.WriteLine("    <  b  >          \"b\" axis");
+        Console.WriteLine("    _______           |");
+        Console.WriteLine(" ^                    |");
+        Console.WriteLine(" d                    |____  \"a\" axis");
+        Console.WriteLine(" v  _______          /");
+        Console.WriteLine("                    /  \"c\" axis");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+    }
+
+    static void PrintPropertiesMenu() {
+        Console.WriteLine("");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+        Console.WriteLine("Enter Weld Group Properties:");
+        Console.WriteLine("(Select using numbers 1-8)");
+        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("");
+        Console.WriteLine("    < b >            \"b\" axis");
+        Console.WriteLine(" ^ |     |            |");
+        Console.WriteLine("   |     |            |");
+        Console.WriteLine(" d |     |            |____  \"a\" axis");
+        Console.WriteLine("   |     |           /");
+        Console.WriteLine(" v |     |          /  \"c\" axis");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+        Console.WriteLine("     1: b = " + b + " in.;  2: d = " + d + " in.");
+        Console.WriteLine("");
+        Console.WriteLine("     3: Pa = " + Pa + " kip");
+        Console.WriteLine("     4: Pb = " + Pb + " kip");
+        Console.WriteLine("     5: Pc = " + Pc + " kip");
+        Console.WriteLine("");
+        Console.WriteLine("     6: Ma = " + Ma + " kip-in.");
+        Console.WriteLine("     7: Mb = " + Mb + " kip-in.");
+        Console.WriteLine("     8: Mc = " + Mc + " kip-in.");
+        Console.WriteLine("");
+        Console.WriteLine("     B: Back to Main Menu");
+        Console.WriteLine("     C: Perform Calculation");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+    }
+
+}
+
+public enum State 
+{
+    MainMenu, 
+    ConfirmWeldType,
+    EnterProperties,
+    Calculating
+};
+
+public enum WeldGroup 
+{
+    NoVal,
+    ParallelA, 
+    ParallelB, 
+    WShapeA, 
+    WShapeB
+};
+

@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupAdv", "SupAdv\SupAdv.csproj", "{5A839BC3-2A2E-48F6-B0C0-916C19F95299}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{DB7C857A-C439-4047-92DE-319A76162BBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A839BC3-2A2E-48F6-B0C0-916C19F95299}.Debug|x86.ActiveCfg = Debug|x86
+		{5A839BC3-2A2E-48F6-B0C0-916C19F95299}.Debug|x86.Build.0 = Debug|x86
+		{5A839BC3-2A2E-48F6-B0C0-916C19F95299}.Release|x86.ActiveCfg = Release|x86
+		{5A839BC3-2A2E-48F6-B0C0-916C19F95299}.Release|x86.Build.0 = Release|x86
+		{DB7C857A-C439-4047-92DE-319A76162BBC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB7C857A-C439-4047-92DE-319A76162BBC}.Debug|x86.Build.0 = Debug|Any CPU
+		{DB7C857A-C439-4047-92DE-319A76162BBC}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB7C857A-C439-4047-92DE-319A76162BBC}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

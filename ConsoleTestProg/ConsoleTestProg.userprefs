@@ -1,0 +1,14 @@
+﻿<Properties StartupItem="ConsoleTestProg/ConsoleTestProg.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ConsoleTestProg/EmptyClass.cs">
+    <Files>
+      <File FileName="ConsoleTestProg/Program.cs" Line="15" Column="4" />
+      <File FileName="ConsoleTestProg/EmptyClass.cs" Line="9" Column="4" />
+      <File FileName="ConsoleTestProg/Properties/AssemblyInfo.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

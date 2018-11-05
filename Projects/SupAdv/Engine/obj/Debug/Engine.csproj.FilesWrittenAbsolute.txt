@@ -1,0 +1,5 @@
+/home/alex/cs/Projects/SupAdv/Engine/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/alex/cs/Projects/SupAdv/Engine/bin/Debug/Engine.dll.mdb
+/home/alex/cs/Projects/SupAdv/Engine/bin/Debug/Engine.dll
+/home/alex/cs/Projects/SupAdv/Engine/obj/Debug/Engine.dll
+/home/alex/cs/Projects/SupAdv/Engine/obj/Debug/Engine.dll.mdb

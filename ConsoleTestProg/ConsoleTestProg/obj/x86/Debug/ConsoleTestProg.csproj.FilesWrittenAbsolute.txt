@@ -1,0 +1,5 @@
+/home/alex/cs/ConsoleTestProg/ConsoleTestProg/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/alex/cs/ConsoleTestProg/ConsoleTestProg/bin/Debug/ConsoleTestProg.exe.mdb
+/home/alex/cs/ConsoleTestProg/ConsoleTestProg/bin/Debug/ConsoleTestProg.exe
+/home/alex/cs/ConsoleTestProg/ConsoleTestProg/obj/x86/Debug/ConsoleTestProg.exe
+/home/alex/cs/ConsoleTestProg/ConsoleTestProg/obj/x86/Debug/ConsoleTestProg.exe.mdb

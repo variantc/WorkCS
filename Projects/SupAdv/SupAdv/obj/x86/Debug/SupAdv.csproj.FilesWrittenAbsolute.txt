@@ -1,0 +1,8 @@
+/home/alex/cs/Projects/SupAdv/SupAdv/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/alex/cs/Projects/SupAdv/SupAdv/obj/x86/Debug/SupAdv.gtk-gui.gui.stetic
+/home/alex/cs/Projects/SupAdv/SupAdv/bin/Debug/SupAdv.exe.mdb
+/home/alex/cs/Projects/SupAdv/SupAdv/bin/Debug/SupAdv.exe
+/home/alex/cs/Projects/SupAdv/SupAdv/obj/x86/Debug/SupAdv.exe
+/home/alex/cs/Projects/SupAdv/SupAdv/obj/x86/Debug/SupAdv.exe.mdb
+/home/alex/cs/Projects/SupAdv/SupAdv/bin/Debug/Engine.dll
+/home/alex/cs/Projects/SupAdv/SupAdv/bin/Debug/Engine.dll.mdb
