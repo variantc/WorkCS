@@ -51,13 +51,18 @@ public class MatProp
                              f.Attributes.ToString());
             StreamReader s = File.OpenText(DATALOC + f.Name);
             string read = null;
+            int i = 0;
+            List<string> lines = new List<string>();
             while ((read = s.ReadLine()) != null)
             {
-                Console.WriteLine(read);
+                Console.WriteLine(i + " " + read);
+                i++;
+                lines.Add(read);
             }
             // WRONG
-            matName = s.ReadLine();
+            matName = lines[0];
             s.Close();
+            Console.WriteLine("Number of Lines: " + lines.ToArray().Length);
         }
 
 
@@ -70,7 +75,7 @@ public class MatProp
         int temp = Int32.Parse(input);
         
         Console.WriteLine(mat.ReturnValue(temp));
-        Console.WriteLine(mat.materialName);
+        Console.WriteLine("Material Name: " + mat.materialName);
 
         // Loop until 'q' is pressed
         string message = "";
