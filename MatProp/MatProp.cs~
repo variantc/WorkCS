@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 public class MatProp
 {
@@ -9,7 +10,10 @@ public class MatProp
         State menuState = State.MainMenu;
         bool quit = false;
 
-        Dictionary<int,double> Sy = new Dictionary<int,double>()
+        // Location of .dat files
+        const string DATALOC = "./data/";
+
+        Dictionary<int,double> SyData = new Dictionary<int,double>()
         { 
             {100,	36},
             {150,	33.8},
@@ -29,31 +33,43 @@ public class MatProp
             {1000,	21.4}
         };
 
-        Dictionary<int,double> Su = new Dictionary<int,double>();
-        Dictionary<int,double> Sm = new Dictionary<int,double>();
-        Dictionary<int,double> E = new Dictionary<int,double>();
+        Dictionary<int,double> SuData = new Dictionary<int,double>();
+        Dictionary<int,double> SmData = new Dictionary<int,double>();
+        Dictionary<int,double> EData = new Dictionary<int,double>();
 
-        Material mat = new Material("newMat",Sy,Su,Sm,E);
+        string matName = "";
+
+        DirectoryInfo dir = new DirectoryInfo(@DATALOC);
+        FileInfo[] matDatFiles = dir.GetFiles("*.dat");
+        Console.WriteLine("Total number of files: {0}", matDatFiles.Length);
+        foreach( FileInfo f in matDatFiles)
+        {
+            Console.WriteLine("Name is : {0}", f.Name);
+            Console.WriteLine("Length of the file is : {0}", f.Length);
+            Console.WriteLine("Creation time is : {0}", f.CreationTime);
+            Console.WriteLine("Attributes of the file are : {0}",
+                             f.Attributes.ToString());
+            StreamReader s = File.OpenText(DATALOC + f.Name);
+            string read = null;
+            while ((read = s.ReadLine()) != null)
+            {
+                Console.WriteLine(read);
+            }
+            matName = s.ReadLine();
+            s.Close();
+        }
 
 
-/*
-*/
+        Material mat = new Material(matName,SyData,SuData,SmData,EData);
+        mat.PrintValues(mat.Sy);
+
         Console.Write("Enter Temperature: ");
         string input = Console.ReadLine();
+        // TODO: Add here methods for dealing with erroneous inputs
         int temp = Int32.Parse(input);
         
         Console.WriteLine(mat.ReturnValue(temp));
-//        for (int i=0; i<15; i++) {
-//            if (mat.SyArray[i,0] > temp) {
-//                if (i==0)
-//                    Console.Write(mat.SyArray[i-1,1]);
-//                else
-//                    Console.Write(mat.SyArray[i-1,1]);
-//                Console.WriteLine(" ksi.");
-//            }
-//        }
-
-//        ElementType[] elemArray = (ElementType[])Enum.GetNames(typeof(ElementType));
+        Console.WriteLine(mat.materialName);
 
         // Loop until 'q' is pressed
         string message = "";
@@ -160,22 +176,23 @@ public class MatProp
 public class Material 
 {
     public string materialName;
-    public Dictionary<int,double> SyArray = new Dictionary<int,double>();
-    public Dictionary<int,double> SuArray = new Dictionary<int,double>();
-    public Dictionary<int,double> SmArray = new Dictionary<int,double>();
-    public Dictionary<int,double> EArray = new Dictionary<int,double>();
+    public Dictionary<int,double> Sy = new Dictionary<int,double>();
+    public Dictionary<int,double> Su = new Dictionary<int,double>();
+    public Dictionary<int,double> Sm = new Dictionary<int,double>();
+    public Dictionary<int,double> E = new Dictionary<int,double>();
 
+    // Constructor
     public Material(string name, 
-                    Dictionary<int,double> Sy, 
-                    Dictionary<int,double> Su, 
-                    Dictionary<int,double> Sm, 
-                    Dictionary<int,double> E)
+                    Dictionary<int,double> SyArray, 
+                    Dictionary<int,double> SuArray, 
+                    Dictionary<int,double> SmArray, 
+                    Dictionary<int,double> EArray)
     {
         materialName = name;
-        SyArray = Sy;
-        SuArray = Su;
-        SmArray = Sm;
-        EArray = E;
+        Sy = SyArray;
+        Su = SuArray;
+        Sm = SmArray;
+        E = EArray;
     }
 
     public double ReturnValue (int temperature) {
@@ -185,29 +202,45 @@ public class Material
         int t1;
         int t2;
 
-        // Try to get a value at the exact temperature
-        if(SyArray.TryGetValue(temperature, out val1))
-            return val1;
+        // Since all code materials are -20->100degF (?) make at least 100degF
+        if(temperature <= 100)
+            temperature = 100;
 
+        if(temperature > 1000) {
+            Console.WriteLine("Temperature out of range");
+            return 0;
+        }
+
+        // Try to get a value at the exact temperature
+        if(Sy.TryGetValue(temperature, out val1))
+            return val1;
+        // Then if nec., round down to nearest 'step', then step down until find value
         else  {
             int step = 50;
 
             var tTemp = temperature - temperature%step;
-            while(!SyArray.TryGetValue(tTemp, out val1)) {
+            while(!Sy.TryGetValue(tTemp, out val1)) {
                 tTemp -= step;
             }
             t1 = tTemp;
 
+            // Then do the opposite, stepping up
             tTemp = temperature - temperature%step + step;
-            while(!SyArray.TryGetValue(tTemp, out val2)) {
+            while(!Sy.TryGetValue(tTemp, out val2)) {
                 tTemp += step;
             }
             t2 = tTemp;
         }
 
-        // return interpolated value
-        return(val1 + (temparature - t1)*(val2-val1)/(t2-t1));
+        // return interpolated value 
+        return(val1 + (temperature - t1)*(val2-val1)/(t2-t1));
 
+    }
+
+    public void PrintValues (Dictionary<int,double> dict) {
+        foreach (KeyValuePair<int,double> data in dict) {
+            Console.WriteLine("\t{0} degF: \t{1}", data.Key, data.Value);
+        }
     }
 }
 
