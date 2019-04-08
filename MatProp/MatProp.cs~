@@ -60,7 +60,7 @@ public class MatProp
                 lines.Add(read);
             }
             // WRONG
-            matName = s.ReadLine();
+            matName = lines[0];
             s.Close();
             Console.WriteLine("Number of Lines: " + lines.ToArray().Length);
         }
