@@ -44,7 +44,7 @@ public class MatProp
             
             Console.WriteLine("\n=================================================\n");
 
-            mats[materialIndex] = new Material(matName,year);
+            mats[materialIndex] = new Material(matName,year,materialIndex+1);
             mats[materialIndex].CreateArrays(lines.ToArray());
             //mats[materialIndex].PrintValues(mats[materialIndex].Sy);
             materialIndex++;
@@ -75,20 +75,34 @@ public class MatProp
             // Main Menu
             if (menuState == State.MainMenu)
             {
-                Console.Clear();
+                //Console.Clear();
                 Console.WriteLine(message);
                 message = "";
-                PrintMainMenu();
+                PrintMainMenu(mats);
+
+                bool MAT_IS_SELECTED = false;
 
                 string input = Console.ReadLine();
+                int matNum;
 
-                // TODO: make then input value automatically pick the correct dictionary
-                // entry
+                try {
+                    matNum = Int32.Parse(input);
+                    Console.WriteLine("tried");
+                }
+                catch {
+                    matNum = -1;
+                    Console.WriteLine("caught");
+                }
+                if (matNum > 0) {
+                    foreach (Material m in mats) {
+                        if (m.materialNumber == matNum)
+                            m.PrintValues();
+                    }
+                }
                 switch (input)
                 {
                     case "1":
-                        // Take to Material Property menu
-                        menuState = State.EnterMaterialProps;
+                        matNum = 1;
                         break;
 
                     case "a":
@@ -104,10 +118,13 @@ public class MatProp
                         message = "\n          INVALID SELECTION";
                         break;
                 }
+
+                if (MAT_IS_SELECTED)
+                    menuState = State.MaterialSelected;
             } 
 
             // Enter Properties
-            else if (menuState == State.EnterMaterialProps)
+            else if (menuState == State.MaterialSelected)
             {
                 Console.Clear();
                 menuState = State.MainMenu;
@@ -128,12 +145,11 @@ public class MatProp
     }
 
 
-    public static void EnterMaterialPropsMenu(string minMax)
+    public static void MaterialSelectedMenu(Material selectedMaterial)
     {
         Console.WriteLine("");
         Console.WriteLine("========================================");
         Console.WriteLine("");
-        Console.WriteLine(" Enter " + minMax + " percentage composition:");
         Console.WriteLine("");
         Console.WriteLine("========================================");
         Console.WriteLine("");
@@ -141,21 +157,24 @@ public class MatProp
     }
 
     // print out the menu
-    private static void PrintMainMenu()
+    private static void PrintMainMenu(Material[] matArray)
     {
-        PrintAvailableElements();
+        PrintMaterialOptions(matArray);
     }
 
-    static void PrintAvailableElements()
+    static void PrintMaterialOptions(Material[] matArray)
     {
         Console.WriteLine("");
         Console.WriteLine("========================================");
         Console.WriteLine("");
-        Console.WriteLine("Select element in composition by number:");
+        Console.WriteLine("\tSelect Material:");
         Console.WriteLine("");
         Console.WriteLine("----------------------------------------");
         Console.WriteLine("");
         
+        foreach (Material m in matArray) {
+            Console.WriteLine("\t {0}\t{1}", m.materialNumber,m.materialName);
+        }
         
         Console.WriteLine("");
         Console.WriteLine("         Enter 'a' to analyse ");
@@ -178,20 +197,14 @@ public class Material
     public Dictionary<int,double> E = new Dictionary<int,double>();
     public string codeYear;
 
+    public int materialNumber;
+
     // Constructor
-    public Material(string name, 
-                    //Dictionary<int,double> SyArray, 
-                    //Dictionary<int,double> SuArray, 
-                    //Dictionary<int,double> SmArray, 
-                    //Dictionary<int,double> EArray,
-                    string year)
+    public Material(string name, string year, int matNum)
     {
         materialName = name;
-        //Sy = SyArray;
-        //Su = SuArray;
-        //Sm = SmArray;
-        //E = EArray;
         codeYear = year;
+        materialNumber = matNum;
     }
 
     public double ReturnValue (int temperature, string property) {
@@ -279,6 +292,10 @@ public class Material
 
     }
 
+    public void PrintAvailableMaterialProperties () {
+        // Some way of displaying options which are not length of zero
+    }
+
     public void PrintValues (Dictionary<int,double> dict) {
         Console.Write("\n");
         foreach (KeyValuePair<int,double> data in dict) {
@@ -352,6 +369,6 @@ public class Material
 public enum State 
 {
     MainMenu, 
-    EnterMaterialProps,
+    MaterialSelected,
     DisplayResults
 };
