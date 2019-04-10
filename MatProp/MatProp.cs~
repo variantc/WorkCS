@@ -170,6 +170,7 @@ public class MatProp
                                             selTemp,
                                             selPropStr,
                                             val);
+                        Console.ReadLine();
                         quit = true;
                     }
                 }
