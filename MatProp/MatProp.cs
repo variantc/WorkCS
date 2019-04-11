@@ -4,6 +4,8 @@ using System.IO;
 
 public class MatProp
 {
+    static int TEMP = 350;
+
     public static void Main()
     {
         // Set to start in Main Menu
@@ -52,23 +54,26 @@ public class MatProp
         }
 
 
-        Console.Write("\nEnter Temperature: \n");
-        // TODO: string input = Console.ReadLine();
-
-        // TODO: Add here methods for dealing with erroneous inputs
-        int temp = 60; // Int32.Parse(input);
-        
-        for (int i=0; i<mats.Length; i++) {
-            Console.WriteLine("Sm of {0} = {1}", 
-                    mats[i].materialName,
-                    mats[i].ReturnValue(temp,"Sm"));
-            Console.WriteLine(mats[i].ReturnValue(temp,"Sy"));
-            Console.WriteLine(mats[i].ReturnValue(temp,"E"));
-            Console.WriteLine("Material Name: " + mats[i].materialName);
-        }
+//        Console.Write("\nEnter Temperature: \n");
+//        // TODO: string input = Console.ReadLine();
+//
+//        // TODO: Add here methods for dealing with erroneous inputs
+//        int temp = 60; // Int32.Parse(input);
+//        
+//        for (int i=0; i<mats.Length; i++) {
+//            Console.WriteLine("Sm of {0} = {1}", 
+//                    mats[i].materialName,
+//                    mats[i].ReturnValue(temp,"Sm"));
+//            Console.WriteLine(mats[i].ReturnValue(temp,"Sy"));
+//            Console.WriteLine(mats[i].ReturnValue(temp,"E"));
+//            Console.WriteLine("Material Name: " + mats[i].materialName);
+//        }
 
         // Selected material variable for use in menu system
         Material selectedMaterial = new Material();
+
+        Console.WriteLine("\n=================================================\n");
+        Console.WriteLine("Total number of files: {0}", matDatFiles.Length);
 
         // Loop until 'q' is pressed
         string message = "";
@@ -90,12 +95,12 @@ public class MatProp
 
                 try {
                     matNum = Int32.Parse(input);
-                    Console.WriteLine("tried");
                     MAT_IS_SELECTED = true;
                 }
                 catch {
                     matNum = -1;
-                    Console.WriteLine("caught");
+                    if (input != "q" && input != "t")
+                        Console.WriteLine("\tInvalid Entry");
                 }
                 if (matNum > 0) {
                     foreach (Material m in mats) {
@@ -111,7 +116,11 @@ public class MatProp
                         case "A":
                             menuState = State.DisplayResults;
                             break;
-
+                        case "t":
+                        case "T":
+                            Console.WriteLine("\n\tEnter temperature:");
+                            TEMP = Int32.Parse(Console.ReadLine());
+                            break;
                         case "q":
                         case "Q":
                             quit = true;
@@ -132,13 +141,13 @@ public class MatProp
             // Enter Properties
             else if (menuState == State.MaterialSelected)
             {
-                //Console.Clear();
+                Console.Clear();
                 menuState = State.PropertyMenu;
             }
             
             else if (menuState == State.PropertyMenu)
             {
-                Console.WriteLine("\nSelect Property: ");
+                MaterialSelectedMenu();
                 Dictionary<int,string> choicesDict = selectedMaterial.ListAvailableProperties();
 
                 string input = Console.ReadLine(); 
@@ -146,32 +155,38 @@ public class MatProp
 
                 try {
                     selProp = Int32.Parse(input);
-                    Console.WriteLine("tried");
                 }
                 catch {
                     selProp = -1;
-                    Console.WriteLine("caught");
+                    if (input != "q" && input != "t")
+                        Console.WriteLine("\tInvalid Entry");
                 }
                 if (selProp > 0) {
                     string selPropStr = choicesDict[selProp];
-                    int selTemp;
-                    Console.WriteLine("\nEnter Temperature: ");
-                    input = Console.ReadLine();
-                    try {
-                        selTemp = Int32.Parse(input);
-                    }
-                    catch {
-                        selTemp = -1;
-                        Console.WriteLine("Invalid Entry");
-                    }
-                    if (selTemp > 0) {
-                        double val = selectedMaterial.ReturnValue(selTemp,selPropStr);
-                        Console.WriteLine("At {0} degF, {1} = {2} ksi",
-                                            selTemp,
+//                    int selTemp;
+//                    Console.WriteLine("\nEnter Temperature: ");
+//                    input = Console.ReadLine();
+//                    try {
+//                        selTemp = Int32.Parse(input);
+//                    }
+//                    catch {
+//                        selTemp = -1;
+//                        if (selPropStr != "q")
+//                            Console.WriteLine("\tInvalid Entry");
+//                    }
+//                    if (selTemp > 0) {
+                        //double val = selectedMaterial.ReturnValue(selTemp,selPropStr);
+                        double val = selectedMaterial.ReturnValue(TEMP,selPropStr);
+                        Console.WriteLine("\n----------------------------------------\n");
+                        Console.WriteLine("\t{0}: At {1} degF, \n\n\t\t{2} = {3} ksi",
+                                            selectedMaterial.materialName,
+                                            //selTemp,
+                                            TEMP,
                                             selPropStr,
                                             val);
+                        Console.WriteLine("\n----------------------------------------\n");
                         menuState = State.MainMenu;
-                    }
+//                }
                 }
                 else
                     menuState = State.MainMenu;
@@ -184,20 +199,21 @@ public class MatProp
                 Console.Clear();
                 Console.WriteLine();
 
-                Console.WriteLine("Enter to end");
+                Console.WriteLine("\tEnter to end");
                 // Wait for enter:
-                Console.ReadLine();
+                string input = Console.ReadLine();
                 quit = true;
             }
         }
     }
 
 
-    public static void MaterialSelectedMenu(Material selectedMaterial)
+    public static void MaterialSelectedMenu()
     {
         Console.WriteLine("");
         Console.WriteLine("========================================");
         Console.WriteLine("");
+        Console.WriteLine("\tSelect Property: ");
         Console.WriteLine("");
         Console.WriteLine("========================================");
         Console.WriteLine("");
@@ -207,31 +223,38 @@ public class MatProp
     // print out the menu
     private static void PrintMainMenu(Material[] matArray)
     {
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+
         PrintMaterialOptions(matArray);
+
+        Console.WriteLine("");
+        Console.WriteLine("----------------------------------------");
+        Console.WriteLine("");
+        Console.WriteLine("\tTemperature\t{0} degF",TEMP);
+        Console.WriteLine("");
+        Console.WriteLine("\tEnter 't' to change temperature");
+        Console.WriteLine("");
+        Console.WriteLine("        Enter 'q' to quit ");
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+        Console.WriteLine("");
+
     }
 
     static void PrintMaterialOptions(Material[] matArray)
     {
-        Console.WriteLine("");
-        Console.WriteLine("========================================");
-        Console.WriteLine("");
         Console.WriteLine("\tSelect Material:");
         Console.WriteLine("");
         Console.WriteLine("----------------------------------------");
         Console.WriteLine("");
         
         foreach (Material m in matArray) {
-            Console.WriteLine("\t {0}\t{1}", m.materialNumber,m.materialName);
+            Console.WriteLine("\t{0}\t{1}", m.materialNumber,m.materialName);
         }
         
-        Console.WriteLine("");
-        Console.WriteLine("");
-        Console.WriteLine("         Enter 'q' to quit ");
-        Console.WriteLine("");
-        Console.WriteLine("========================================");
-        Console.WriteLine("");
-        Console.WriteLine("");
-
     }
 }
 
@@ -340,10 +363,6 @@ public class Material
             returnVal *= 1000;
         return(returnVal);
 
-    }
-
-    public void PrintAvailableMaterialProperties () {
-        // Some way of displaying options which are not length of zero
     }
 
     // Test to see if each dict is  present, and print dict if they are
@@ -457,11 +476,6 @@ public class Material
             i++;
         }
         return dict;
-    }
-
-    // TODO: remove?
-    public string ChooseAvailableProperty (Dictionary<int,string> propsDict, int num) {
-        return propsDict[num];
     }
 }
 
