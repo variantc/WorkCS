@@ -180,8 +180,9 @@ public class MatProp
                         //double val = selectedMaterial.ReturnValue(selTemp,selPropStr);
                         double val = selectedMaterial.ReturnValue(TEMP,selPropStr);
                         Console.WriteLine("\n----------------------------------------\n");
-                        Console.WriteLine("\t{0}: At {1} degF, \n\n\t\t{2} = {3} ksi",
+                        Console.WriteLine("\t{0} ({1}): At {2} degF, \n\n\t\t{3} = {4} ksi",
                                             selectedMaterial.materialName,
+                                            selectedMaterial.codeYear,
                                             //selTemp,
                                             TEMP,
                                             selPropStr,
@@ -216,7 +217,7 @@ public class MatProp
         Console.WriteLine("");
         Console.WriteLine("========================================");
         Console.WriteLine("");
-        Console.WriteLine("\t" + selMat.materialName);
+        Console.WriteLine("\t{0} ({1})", selMat.materialName, selMat.codeYear);
         Console.WriteLine("");
         Console.WriteLine("========================================");
         Console.WriteLine("");
@@ -259,7 +260,7 @@ public class MatProp
         Console.WriteLine("");
         
         foreach (Material m in matArray) {
-            Console.WriteLine("\t{0}\t{1}", m.materialNumber,m.materialName);
+            Console.WriteLine("\t{0}\t{1} ({2})", m.materialNumber,m.materialName,m.codeYear);
         }
         
     }
@@ -271,6 +272,7 @@ public class Material
     public Dictionary<int,double> Sy = new Dictionary<int,double>();
     public Dictionary<int,double> Su = new Dictionary<int,double>();
     public Dictionary<int,double> Sm = new Dictionary<int,double>();
+    public Dictionary<int,double> S = new Dictionary<int,double>();
     public Dictionary<int,double> E = new Dictionary<int,double>();
     public string codeYear;
 
@@ -310,6 +312,9 @@ public class Material
                 break;
             case "Sm" :
                 dict = Sm;
+                break;
+            case "S" :
+                dict = S;
                 break;
             case "E" :
                 dict = E;
@@ -383,6 +388,8 @@ public class Material
             PrintValuesOfDict(Su,"Su");
         if (Sm.Count > 0)
             PrintValuesOfDict(Sm,"Sm");
+        if (S.Count > 0)
+            PrintValuesOfDict(S,"S");
         if (E.Count > 0)
             PrintValuesOfDict(E,"E");
     }
@@ -419,6 +426,10 @@ public class Material
                     targetType = "Sm";
                     Console.WriteLine("Target Type: Sm");
                     continue;
+                case "S" :
+                    targetType = "S";
+                    Console.WriteLine("Target Type: S");
+                    continue;
                 case "E" :
                     targetType = "E";
                     Console.WriteLine("Target Type: E");
@@ -445,6 +456,10 @@ public class Material
                 case "Sm" :
                     strings = dataStrings[i].Split('\t');
                     Sm[Int32.Parse(strings[0])] = double.Parse(strings[1]);
+                    break;
+                case "S" :
+                    strings = dataStrings[i].Split('\t');
+                    S[Int32.Parse(strings[0])] = double.Parse(strings[1]);
                     break;
                 case "E" :
                     strings = dataStrings[i].Split('\t');
@@ -477,6 +492,12 @@ public class Material
         }
         if (Sm.Count > 0) {
             returnStr = "Sm";
+            Console.WriteLine("\t{0}\t{1}",i,returnStr);
+            dict[i] = returnStr;
+            i++;
+        }
+        if (S.Count > 0) {
+            returnStr = "S";
             Console.WriteLine("\t{0}\t{1}",i,returnStr);
             dict[i] = returnStr;
             i++;
