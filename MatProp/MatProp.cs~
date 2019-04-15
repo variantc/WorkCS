@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 public class MatProp
 {
-    static int TEMP = 350;
+    public static int TEMP = 350;  // Fahrenheit
+    public static int DELAY = 500; // milliseconds
 
     public static void Main()
     {
@@ -72,6 +74,9 @@ public class MatProp
         // Selected material variable for use in menu system
         Material selectedMaterial = new Material();
 
+        Console.WriteLine("\n=================================================\n");
+        Console.WriteLine("Total number of files: {0}", matDatFiles.Length);
+
         // Loop until 'q' is pressed
         string message = "";
         while (!quit)
@@ -80,7 +85,7 @@ public class MatProp
             // Main Menu
             if (menuState == State.MainMenu)
             {
-                //Console.Clear();
+                Console.Clear();
                 Console.WriteLine(message);
                 message = "";
                 PrintMainMenu(mats);
@@ -144,7 +149,7 @@ public class MatProp
             
             else if (menuState == State.PropertyMenu)
             {
-                MaterialSelectedMenu();
+                MaterialSelectedMenu(selectedMaterial);
                 Dictionary<int,string> choicesDict = selectedMaterial.ListAvailableProperties();
 
                 string input = Console.ReadLine(); 
@@ -182,7 +187,7 @@ public class MatProp
                                             selPropStr,
                                             val);
                         Console.WriteLine("\n----------------------------------------\n");
-                        menuState = State.MainMenu;
+                        menuState = State.DisplayResults;
 //                }
                 }
                 else
@@ -193,20 +198,25 @@ public class MatProp
             // Display Results
             else if (menuState == State.DisplayResults)
             {
-                Console.Clear();
                 Console.WriteLine();
 
-                Console.WriteLine("\tEnter to end");
+                Console.WriteLine("\tContinue?");
                 // Wait for enter:
                 string input = Console.ReadLine();
-                quit = true;
+                menuState = State.MainMenu;
+                if (input == "q" or input == "Q")
+                    quit = true;
             }
         }
     }
 
 
-    public static void MaterialSelectedMenu()
+    public static void MaterialSelectedMenu(Material selMat)
     {
+        Console.WriteLine("");
+        Console.WriteLine("========================================");
+        Console.WriteLine("");
+        Console.WriteLine("\t" + selMat.materialName);
         Console.WriteLine("");
         Console.WriteLine("========================================");
         Console.WriteLine("");
@@ -265,6 +275,9 @@ public class Material
     public string codeYear;
 
     public int materialNumber;
+
+    // Reference to MatProp object? - Dodgy?
+    int delay = MatProp.DELAY/500;
 
     // Dummy constructor
     public Material() {} 
@@ -378,6 +391,7 @@ public class Material
         Console.Write("\nAvailable Data - {0}:", dictName);
         Console.Write("\n");
         foreach (KeyValuePair<int,double> data in dict) {
+            Thread.Sleep(delay);
             Console.WriteLine("\t{0} degF: \t{1}", data.Key, data.Value);
         }
     }
@@ -391,6 +405,7 @@ public class Material
 
         // change the target type each time we hit the keywords Sy, Su, etc.
         for (int i=0; i<dataStrings.Length; i++) {
+            Thread.Sleep(delay);
             switch(dataStrings[i]) {
                 case "Sy" :
                     targetType = "Sy";
