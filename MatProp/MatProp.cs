@@ -402,7 +402,7 @@ public class Material
 
         // change the target type each time we hit the keywords Sy, Su, etc.
         for (int i=0; i<dataStrings.Length; i++) {
-            Thread.Sleep(delay);
+            Thread.Sleep(delay/10);
             switch(dataStrings[i]) {
                 case "Sy" :
                     targetType = "Sy";
