@@ -106,10 +106,15 @@ public class MatProp
                 }
                 if (matNum > 0) {
                     foreach (Material m in mats) {
+                        // material correctly selected
                         if (m.materialNumber == matNum)
                             selectedMaterial = m;
-                            m.PrintValues();
+                        // number doesn't correspond to material
+                        else 
+                            Console.WriteLine("\n\tMaterial option not found");
                     }
+                    // Display (briefly) the property values of the selected material
+                    selectedMaterial.PrintValues();
                 }
                 else {
                     switch (input)
@@ -165,31 +170,16 @@ public class MatProp
                 }
                 if (selProp > 0) {
                     string selPropStr = choicesDict[selProp];
-//                    int selTemp;
-//                    Console.WriteLine("\nEnter Temperature: ");
-//                    input = Console.ReadLine();
-//                    try {
-//                        selTemp = Int32.Parse(input);
-//                    }
-//                    catch {
-//                        selTemp = -1;
-//                        if (selPropStr != "q")
-//                            Console.WriteLine("\tInvalid Entry");
-//                    }
-//                    if (selTemp > 0) {
-                        //double val = selectedMaterial.ReturnValue(selTemp,selPropStr);
-                        double val = selectedMaterial.ReturnValue(TEMP,selPropStr);
-                        Console.WriteLine("\n----------------------------------------\n");
-                        Console.WriteLine("\t{0} ({1}): At {2} degF, \n\n\t\t{3} = {4} ksi",
-                                            selectedMaterial.materialName,
-                                            selectedMaterial.codeYear,
-                                            //selTemp,
-                                            TEMP,
-                                            selPropStr,
-                                            val);
-                        Console.WriteLine("\n----------------------------------------\n");
-                        menuState = State.DisplayResults;
-//                }
+                    double val = selectedMaterial.ReturnValue(TEMP,selPropStr);
+                    Console.WriteLine("\n----------------------------------------\n");
+                    Console.WriteLine("\t{0} ({1}): At {2} degF, \n\n\t\t{3} = {4} ksi",
+                                        selectedMaterial.materialName,
+                                        selectedMaterial.codeYear,
+                                        TEMP,
+                                        selPropStr,
+                                        val);
+                    Console.WriteLine("\n----------------------------------------\n");
+                    menuState = State.DisplayResults;
                 }
                 else
                     menuState = State.MainMenu;
